@@ -1,0 +1,32 @@
+{% extends "onlinecourse/user_course_list_bootstrap.html" %}
+{% load static %}
+{% block content %}
+<div class="container mt-4">
+  <h2>{{ course.name }}</h2>
+  <p>{{ course.description }}</p>
+
+  <div class="accordion" id="lessonAccordion">
+    {% for lesson in course.lesson_set.all %}
+    <div class="card">
+      <div class="card-header" id="heading{{ forloop.counter }}">
+        <h5 class="mb-0">
+          <button class="btn btn-link" type="button" data-toggle="collapse"
+                  data-target="#collapse{{ forloop.counter }}">
+            {{ lesson.title }}
+          </button>
+        </h5>
+      </div>
+      <div id="collapse{{ forloop.counter }}" class="collapse" data-parent="#lessonAccordion">
+        <div class="card-body">
+          {{ lesson.content }}
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+
+  {% if user.is_authenticated %}
+    <a href="{% url 'onlinecourse:exam' course.id %}" class="btn btn-primary mt-3">Take Exam</a>
+  {% endif %}
+</div>
+{% endblock %}
